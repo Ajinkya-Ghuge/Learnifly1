@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learnifly - Topic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, rgb(13, 13, 26), rgb(26, 26, 59));
+      color: #fff;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .cover-section {
+      background-size: cover;
+      background-position: center;
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .cover-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+    .cover-content {
+      position: relative;
+      z-index: 2;
+    }
+    h1 {
+      font-size: 30px; /* Increased to at least 30px as requested */
+      color: #00ccff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+      margin-bottom: 1rem;
+    }
+    #topicDescription {
+      font-size: 27px; /* Increased to at least 20px as requested */
+      color: #e0e0e0;
+    }
+    h2 {
+      font-size: 2rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    h3 {
+      font-size: 1.5rem;
+      color: #FFD700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    h3:hover {
+      color: #ffeb3b;
+    }
+    p {
+      font-size: 1.2rem;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .code-example, .code-editor, .code-output {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+    .code-example:hover {
+      transform: translateY(-5px);
+    }
+    .code-example pre {
+      background: #1a1a3b;
+      padding: 1rem;
+      border-radius: 5px;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: auto;
+    }
+    .code-editor textarea {
+      width: 100%;
+      min-height: 200px;
+      background: #1a1a3b;
+      border: 1px solid #00ccff33;
+      border-radius: 5px;
+      padding: 1rem;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .code-editor textarea:focus {
+      border-color: #00ccff;
+      outline: none;
+    }
+    .code-editor button, .copy-button {
+      background: #00ccff;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    .code-editor button:hover, .copy-button:hover {
+      background: #0099cc;
+    }
+    .code-output {
+      min-height: 100px;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    
+    .back-button {
+      background: #10b981;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 2rem;
+      transition: background 0.3s ease;
+    }
+    .back-button:hover {
+      background: #059669;
+    }
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .collapsible-content.active {
+      max-height: 1000px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    h1#topicTitle {
+    font-size: 35px;
+}
+  </style>
+</head>
+<body>
+  <div id="coverSection" class="cover-section">
+    <div class="cover-content">
+      <h1 id="topicTitle"></h1>
+      <p id="topicDescription"></p>
+    </div>
+  </div>
+  <div class="container">
+    <a href="/" class="back-button">Back to Home</a>
+    
+    <div id="topicContent">
+      <!-- Dynamic content will be inserted here -->
+    </div>
+    
+    <div class="code-editor fade-in">
+      <h2>Try It Yourself</h2>
+      <textarea id="codeInput" placeholder="Write your Python or JavaScript code here..."></textarea>
+      <button onclick="runCode()">Run Code</button>
+    </div>
+    
+    <div class="code-output fade-in" id="output">
+      <!-- Output will appear here -->
+    </div>
+  </div>
+
+  <script>
+    async function loadPyodideAndRun() {
+      window.pyodide = await loadPyodide();
+    }
+    loadPyodideAndRun();
+
+    async function runCode() {
+      const code = document.getElementById('codeInput').value;
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = '';
+
+      const course = new URLSearchParams(window.location.search).get('course') || 'Unknown Course';
+      
+      if (course.includes('JavaScript')) {
+        try {
+          const result = eval(code);
+          outputDiv.textContent = result !== undefined ? String(result) : 'No output';
+        } catch (error) {
+          outputDiv.textContent = `Error: ${error.message}`;
+        }
+      } else {
+        try {
+          window.pyodide.runPython(`
+import sys
+from io import StringIO
+
+sys.stdout = StringIO()
+
+${code}
+
+sys.stdout.getvalue()
+          `);
+          const output = window.pyodide.runPython('sys.stdout.getvalue()');
+          outputDiv.textContent = output || 'No output';
+        } catch (error) {
+          outputDiv.textContent = `Error: ${error.message}`;
+        }
+      }
+    }
+
+    function copyCode(code) {
+      document.getElementById('codeInput').value = code;
+    }
+
+    function toggleSection(event) {
+      const content = event.target.nextElementSibling;
+      content.classList.toggle('active');
+    }
+
+    const topicContent = {
+      'Interactive Learning': {
+        background: '/static/images/sql-forground.gif',
+        'Variables and Data Types': `
+          <div class="fade-in">
+            <h2>Concept: Variables and Data Types</h2>
+            <p>
+              Variables are containers for storing data values. In Python, variables are dynamically typed, meaning you don't need to specify the type explicitly.
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Key Data Types</h3>
+            <div class="collapsible-content">
+              <p>
+                Python supports several fundamental data types:<br>
+                - <strong>Integers</strong>: Whole numbers (e.g., 42).<br>
+                - <strong>Floats</strong>: Decimal numbers (e.g., 3.14).<br>
+                - <strong>Strings</strong>: Text data (e.g., "Hello").<br>
+                - <strong>Lists</strong>: Ordered, mutable collections (e.g., [1, 2, 3]).<br>
+                - <strong>Booleans</strong>: True or False values.
+              </p>
+              <div class="code-example">
+                <h3>Example: Variables and Data Types</h3>
+                <pre>
+# Assigning variables
+name = "Alice"
+age = 25
+height = 5.6
+hobbies = ["reading", "coding", "hiking"]
+is_student = True
+
+# Printing variables
+print(f"Name: {name}")
+print(f"Age: {age} years")
+print(f"Height: {height} feet")
+print(f"Hobbies: {hobbies}")
+print(f"Student: {is_student}")
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`# Assigning variables\nname = \\"Alice\\"\nage = 25\nheight = 5.6\nhobbies = [\\"reading\\", \\"coding\\", \\"hiking\\"]\nis_student = True\n\n# Printing variables\nprint(f\\"Name: {name}\\")\\nprint(f\\"Age: {age} years\\")\\nprint(f\\"Height: {height} feet\\")\\nprint(f\\"Hobbies: {hobbies}\\")\\nprint(f\\"Student: {is_student}\\")\`)">Copy Code</button>
+                <p>
+                  Output:<br>
+                  Name: Alice<br>
+                  Age: 25 years<br>
+                  Height: 5.6 feet<br>
+                  Hobbies: ['reading', 'coding', 'hiking']<br>
+                  Student: True
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Create variables for your name, age, and favorite hobbies, then print them using an f-string.
+              </p>
+            </div>
+          </div>
+        `,
+        'Control Structures': `
+          <div class="fade-in">
+            <h2>Concept: Control Structures</h2>
+            <p>
+              Control structures determine the flow of execution in a program. They include conditionals (if-else statements) and loops (for and while).
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Conditionals</h3>
+            <div class="collapsible-content">
+              <p>
+                Use <code>if</code>, <code>elif</code>, and <code>else</code> to execute code based on conditions.
+              </p>
+              <div class="code-example">
+                <h3>Example: If-Else</h3>
+                <pre>
+age = 18
+if age >= 18:
+    print("You are an adult.")
+else:
+    print("You are a minor.")
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`age = 18\nif age >= 18:\n    print(\\"You are an adult.\\")\nelse:\n    print(\\"You are a minor.\\")\`)">Copy Code</button>
+                <p>
+                  Output: You are an adult.
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Loops</h3>
+            <div class="collapsible-content">
+              <p>
+                - <strong>For Loop</strong>: Iterates over a sequence.<br>
+                - <strong>While Loop</strong>: Repeats as long as a condition is True.
+              </p>
+              <div class="code-example">
+                <h3>Example: For Loop</h3>
+                <pre>
+fruits = ["apple", "banana", "orange"]
+for fruit in fruits:
+    print(f"I like {fruit}")
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`fruits = [\\"apple\\", \\"banana\\", \\"orange\\"]\nfor fruit in fruits:\n    print(f\\"I like {fruit}\")\`)">Copy Code</button>
+                <p>
+                  Output:<br>
+                  I like apple<br>
+                  I like banana<br>
+                  I like orange
+                </p>
+              </div>
+              <div class="code-example">
+                <h3>Example: While Loop</h3>
+                <pre>
+count = 1
+while count <= 3:
+    print(f"Count: {count}")
+    count += 1
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`count = 1\nwhile count <= 3:\n    print(f\\"Count: {count}\\")\\n    count += 1\`)">Copy Code</button>
+                <p>
+                  Output:<br>
+                  Count: 1<br>
+                  Count: 2<br>
+                  Count: 3
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Write a program that prints numbers 1 to 5 using a for loop, then try it with a while loop.
+              </p>
+            </div>
+          </div>
+        `
+      },
+      'Python Mastery': {
+        background: '/static/images/intermediate-python.gif',
+        'Data Structures': `
+          <div class="fade-in">
+            <h2>Concept: Data Structures</h2>
+            <p>
+              Data structures organize and store data for efficient access. Python's built-in structures include lists, tuples, dictionaries, and sets.
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Lists</h3>
+            <div class="collapsible-content">
+              <p>
+                Lists are ordered, mutable collections supporting indexing and methods like <code>append()</code>.
+              </p>
+              <div class="code-example">
+                <h3>Example: Lists</h3>
+                <pre>
+numbers = [1, 2, 3]
+numbers.append(4)
+print(numbers[0])
+print(numbers)
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`numbers = [1, 2, 3]\nnumbers.append(4)\nprint(numbers[0])\nprint(numbers)\`)">Copy Code</button>
+                <p>
+                  Output:<br>
+                  1<br>
+                  [1, 2, 3, 4]
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Tuples</h3>
+            <div class="collapsible-content">
+              <p>
+                Tuples are ordered, immutable collections, ideal for fixed data.
+              </p>
+              <div class="code-example">
+                <h3>Example: Tuples</h3>
+                <pre>
+point = (10, 20)
+x, y = point
+print(f"X: {x}, Y: {y}")
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`point = (10, 20)\nx, y = point\nprint(f\\"X: {x}, Y: {y}\")\`)">Copy Code</button>
+                <p>
+                  Output: X: 10, Y: 20
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Dictionaries</h3>
+            <div class="collapsible-content">
+              <p>
+                Dictionaries store key-value pairs for fast lookup.
+              </p>
+              <div class="code-example">
+                <h3>Example: Dictionaries</h3>
+                <pre>
+student = {"name": "Alice", "age": 20}
+print(student["name"])
+student["grade"] = "A"
+print(student)
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`student = {\\"name\\": \\"Alice\\", \\"age\\": 20}\nprint(student[\\"name\\"])\nstudent[\\"grade\\"] = \\"A\\"\nprint(student)\`)">Copy Code</button>
+                <p>
+                  Output:<br>
+                  Alice<br>
+                  {'name': 'Alice', 'age': 20, 'grade': 'A'}
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Sets</h3>
+            <div class="collapsible-content">
+              <p>
+                Sets store unique, unordered elements, useful for operations like union.
+              </p>
+              <div class="code-example">
+                <h3>Example: Sets</h3>
+                <pre>
+set1 = {1, 2, 3}
+set2 = {2, 3, 4}
+print(set1.union(set2))
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`set1 = {1, 2, 3}\nset2 = {2, 3, 4}\nprint(set1.union(set2))\`)">Copy Code</button>
+                <p>
+                  Output: {1, 2, 3, 4}
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Create a dictionary of a student's details (name, age, courses), add a new course, and print the updated dictionary.
+              </p>
+            </div>
+          </div>
+        `,
+        'Web Scraping': `
+          <div class="fade-in">
+            <h2>Concept: Web Scraping</h2>
+            <p>
+              Web scraping extracts data from websites programmatically using libraries like <code>requests</code> and <code>BeautifulSoup</code>.
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Fetching Web Pages</h3>
+            <div class="collapsible-content">
+              <p>
+                The <code>requests</code> library retrieves HTML content from a URL.
+              </p>
+              <div class="code-example">
+                <h3>Example: Fetching a Web Page</h3>
+                <pre>
+import requests
+
+response = requests.get("https://example.com")
+print(response.text[:100])
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`import requests\n\nresponse = requests.get(\\"https://example.com\\")\nprint(response.text[:100])\`)">Copy Code</button>
+                <p>
+                  Output: HTML content (first 100 characters).
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Parsing HTML</h3>
+            <div class="collapsible-content">
+              <p>
+                <code>BeautifulSoup</code> parses HTML to extract elements by tags or classes.
+              </p>
+              <div class="code-example">
+                <h3>Example: Parsing with BeautifulSoup</h3>
+                <pre>
+from bs4 import BeautifulSoup
+
+html = "<html><body><h1>Title</h1><p class='text'>Hello</p></body></html>"
+soup = BeautifulSoup(html, "html.parser")
+title = soup.find("h1").text
+paragraph = soup.find("p", class_="text").text
+print(title, paragraph)
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`from bs4 import BeautifulSoup\n\nhtml = \\"<html><body><h1>Title</h1><p class='text'>Hello</p></body></html>\\"\nsoup = BeautifulSoup(html, \\"html.parser\\")\ntitle = soup.find(\\"h1\\").text\nparagraph = soup.find(\\"p\\", class_=\\"text\\").text\nprint(title, paragraph)\`)">Copy Code</button>
+                <p>
+                  Output: Title Hello
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Ethical Considerations</h3>
+            <div class="collapsible-content">
+              <p>
+                Respect website terms, avoid overloading servers, and use APIs when available.
+              </p>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Fetch the title of a simple website (e.g., https://example.com) using <code>requests</code> and <code>BeautifulSoup</code>.
+              </p>
+            </div>
+          </div>
+        `
+      },
+      'JavaScript Essentials': {
+        background: '/static/images/javascript-course-banner.gif',
+        'JavaScript Basics': `
+          <div class="fade-in">
+            <h2>Concept: JavaScript Basics</h2>
+            <p>
+              JavaScript is a versatile language for web development, enabling dynamic web pages.
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Variables</h3>
+            <div class="collapsible-content">
+              <p>
+                Use <code>let</code>, <code>const</code>, or <code>var</code> to declare variables.
+              </p>
+              <div class="code-example">
+                <h3>Example: Variables</h3>
+                <pre>
+let name = "Bob";
+const age = 30;
+name = "Alice";
+console.log(name, age);
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`let name = \\"Bob\\";\nconst age = 30;\nname = \\"Alice\\";\nconsole.log(name, age);\`)">Copy Code</button>
+                <p>
+                  Output: Alice 30
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Data Types</h3>
+            <div class="collapsible-content">
+              <p>
+                JavaScript includes numbers, strings, booleans, arrays, and objects.
+              </p>
+              <div class="code-example">
+                <h3>Example: Data Types</h3>
+                <pre>
+let number = 42;
+let text = "Hello";
+let array = [1, 2, 3];
+let obj = { name: "Alice", age: 25 };
+console.log(number, text, array, obj);
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`let number = 42;\nlet text = \\"Hello\\";\nlet array = [1, 2, 3];\nlet obj = { name: \\"Alice\\", age: 25 };\nconsole.log(number, text, array, obj);\`)">Copy Code</button>
+                <p>
+                  Output: 42 Hello [1, 2, 3] {name: "Alice", age: 25}
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Create an array of your favorite foods and print it to the console.
+              </p>
+            </div>
+          </div>
+        `,
+        'DOM Manipulation': `
+          <div class="fade-in">
+            <h2>Concept: DOM Manipulation</h2>
+            <p>
+              The Document Object Model (DOM) allows JavaScript to dynamically change web page content.
+            </p>
+            <h3 class="collapsible" onclick="toggleSection(event)">Accessing Elements</h3>
+            <div class="collapsible-content">
+              <p>
+                Use <code>getElementById</code> or <code>querySelector</code> to select elements.
+              </p>
+              <div class="code-example">
+                <h3>Example: Selecting Elements</h3>
+                <pre>
+&lt;div id="myDiv"&gt;Hello&lt;/div&gt;
+&lt;script&gt;
+let div = document.getElementById("myDiv");
+console.log(div.textContent);
+&lt;/script&gt;
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`let div = document.getElementById(\\"myDiv\\");\nconsole.log(div.textContent);\`)">Copy Code</button>
+                <p>
+                  Output: Hello
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Modifying Elements</h3>
+            <div class="collapsible-content">
+              <p>
+                Change content, attributes, or styles of elements.
+              </p>
+              <div class="code-example">
+                <h3>Example: Modifying Elements</h3>
+                <pre>
+&lt;div id="myDiv"&gt;Hello&lt;/div&gt;
+&lt;script&gt;
+let div = document.getElementById("myDiv");
+div.textContent = "World";
+div.style.color = "blue";
+&lt;/script&gt;
+                </pre>
+                <button class="copy-button" onclick="copyCode(\`let div = document.getElementById(\\"myDiv\\");\ndiv.textContent = \\"World\\";\ndiv.style.color = \\"blue\\";\`)">Copy Code</button>
+                <p>
+                  Output: The div's text changes to "World" in blue.
+                </p>
+              </div>
+            </div>
+            <h3 class="collapsible" onclick="toggleSection(event)">Practice Exercise</h3>
+            <div class="collapsible-content">
+              <p>
+                Create a button that changes the text of a paragraph when clicked.
+              </p>
+            </div>
+          </div>
+        `
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const course = params.get('course') || 'Unknown Course';
+    const topic = params.get('topic') || 'Unknown Topic';
+    
+    const coverSection = document.getElementById('coverSection');
+    if (topicContent[course] && topicContent[course].background) {
+      coverSection.style.backgroundImage = `url(${topicContent[course].background})`;
+    } else {
+      coverSection.style.backgroundImage = `url('/static/images/sql-forground.gif')`;
+    }
+
+    document.getElementById('topicTitle').textContent = `${topic} - ${course}`;
+    document.getElementById('topicDescription').textContent = `Learn the fundamentals of ${topic} in the ${course} course. Dive into interactive lessons and hands-on coding!`;
+    
+    const contentDiv = document.getElementById('topicContent');
+    if (topicContent[course] && topicContent[course][topic]) {
+      contentDiv.innerHTML = topicContent[course][topic];
+      
+      const defaultCode = {
+        'Variables and Data Types': `
+# Try creating your own variables and printing them
+name = "Your Name"
+age = 30
+hobbies = ["reading", "coding"]
+print(f"Hello, my name is {name}, I am {age} years old, and my hobbies are {hobbies}.")`,
+        'Control Structures': `
+# Try a for loop
+for i in range(1, 6):
+    print(f"Number: {i}")`,
+        'Data Structures': `
+# Try a dictionary
+student = {"name": "Your Name", "age": 20, "courses": ["Math", "Science"]}
+student["grade"] = "A"
+print(student)`,
+        'Web Scraping': `
+import requests
+from bs4 import BeautifulSoup
+
+# Try fetching and parsing a simple website
+response = requests.get("https://example.com")
+soup = BeautifulSoup(response.text, "html.parser")
+title = soup.find("h1").text
+print(title)`,
+        'JavaScript Basics': `
+let name = "Your Name";
+const age = 30;
+console.log("Hello, my name is " + name + " and I am " + age + " years old.");`,
+        'DOM Manipulation': `
+&lt;p id="demo"&gt;Click the button&lt;/p&gt;
+&lt;button onclick="myFunction()"&gt;Change Text&lt;/button&gt;
+&lt;script&gt;
+function myFunction() {
+    document.getElementById("demo").textContent = "Text changed!";
+}
+&lt;/script&gt;`
+      };
+      
+      document.getElementById('codeInput').value = defaultCode[topic] || '// Write your code here';
+    } else {
+      contentDiv.innerHTML = `
+        <div class="fade-in">
+          <h2>Content Not Found</h2>
+          <p>Sorry, content for ${topic} in ${course} is not available.</p>
+        </div>
+      `;
+      document.getElementById('codeInput').value = '// Write your code here';
+    }
+  </script>
+</body>
+</html>

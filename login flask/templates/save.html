@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learnifly - Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="nav-bar">
+  <a href="/" class="nav-logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Learnifly Logo" class="logo-img"
+         onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50.png?text=L';">
+  </a>
+  <div class="nav-links">
+    <a href="/" class="nav-button">Home</a>
+    <button class="nav-button" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-button" onclick="showPage('progress')">Progress</button>
+    <button class="nav-button" onclick="showPage('courses')">Courses</button>
+    <button class="nav-button" onclick="showPage('studio')">3D Studio</button>
+    <a href="/profile" class="nav-button">Profile</a>
+    <button class="nav-button toggle-btn" onclick="toggleDarkMode()">🌓</button>
+    <a href="/logout" class="nav-button logout-btn">Logout</a>
+  </div>
+</nav>
+
+<!-- Dashboard -->
+<div id="dashboard" class="page active">
+  <div class="dashboard-header">
+    <h1 class="animate-title">Welcome to Learnifly!</h1>
+  </div>
+  <div class="profile-card animate-card">
+    <img src="https://via.placeholder.com/80" alt="User Avatar" class="avatar">
+    <h2>Hey, {{ session.get('user_name', 'User') }} 👋</h2>
+    <p>Total XP: <span id="total-xp">0</span></p>
+    <p>Courses Enrolled: <span id="courses-enrolled">0</span></p>
+    <div class="badges-container">
+      <h3>Your Badges</h3>
+      <div id="badges-list"></div>
+    </div>
+  </div>
+  <div class="progress-card animate-card">
+    <h2>Current Progress</h2>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 65%;" data-percentage="65"></div>
+    </div>
+    <p>65% of monthly goal completed</p>
+    <div class="xp-points">+50 XP</div>
+  </div>
+  <div class="learning-path animate-card">
+    <h2>Your Learning Path</h2>
+    <div class="path-container">
+      <div class="milestone" id="milestone-1" data-progress="0">
+        <span class="milestone-icon">📚</span>
+        <p>Start Learning</p>
+      </div>
+      <div class="path-line"></div>
+      <div class="milestone" id="milestone-2" data-progress="50">
+        <span class="milestone-icon">🏅</span>
+        <p>Python Novice</p>
+      </div>
+      <div class="path-line"></div>
+      <div class="milestone" id="milestone-3" data-progress="100">
+        <span class="milestone-icon">🌟</span>
+        <p>Course Master</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Progress Page -->
+<div id="progress" class="page">
+  <div class="dashboard-header">
+    <h1 class="animate-title">Your Progress</h1>
+  </div>
+  <div class="progress-card animate-card">
+    <h2>Course Completion</h2>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 45%;" data-percentage="45"></div>
+    </div>
+    <p>Completed 3 out of 7 courses</p>
+  </div>
+  <div class="leaderboard animate-card" style="margin-top: 4rem;">
+    <h3>Galactic Leaderboard</h3>
+    <div class="leaderboard-container">
+      {% for rank, name, points in [
+        (1, 'Tanaji', 1200), (2, 'Apoorva', 1150), (3, 'Rohan', 1100),
+        (4, 'Ajinkya', 1050), (5, 'Priya', 1000), (6, 'Sachin', 950)
+      ] %}
+      <div class="leaderboard-item" data-rank="{{ rank }}">
+        <div class="rank">{{ rank }}</div>
+        <div class="player-info">
+          <span class="player-name">{{ name }}</span>
+          <span class="player-points">{{ points }} points</span>
+        </div>
+        {% if rank == 1 %}
+          <div class="trophy">🏆</div>
+        {% elif rank == 2 %}
+          <div class="trophy">🥈</div>
+        {% elif rank == 3 %}
+          <div class="trophy">🥉</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Courses Page -->
+<div id="courses" class="page">
+  <div class="dashboard-header">
+    <h1 class="animate-title">Available Courses</h1>
+  </div>
+  <div class="course-grid">
+    <div class="course-container">
+      <div class="course-card animate-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <h3>Python Basics</h3>
+            <p>Learn fundamental programming concepts</p>
+            <div class="xp-reward">+100 XP</div>
+          </div>
+          <div class="card-back">
+            <h3>Quick Quiz</h3>
+            <p>What is Python’s main feature?</p>
+            <button class="quiz-btn" onclick="checkAnswer(this, 'Easy Syntax')">Easy Syntax</button>
+          </div>
+        </div>
+      </div>
+      <button class="enroll-btn" id="enroll-python">Enroll Now</button>
+    </div>
+
+    <div class="course-container">
+      <div class="course-card animate-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <h3>Web Development</h3>
+            <p>HTML, CSS, and JavaScript fundamentals</p>
+            <div class="xp-reward">+150 XP</div>
+          </div>
+          <div class="card-back">
+            <h3>Quick Quiz</h3>
+            <p>Which is a CSS property?</p>
+            <button class="quiz-btn" onclick="checkAnswer(this, 'color')">color</button>
+          </div>
+        </div>
+      </div>
+      <button class="enroll-btn" id="enroll-web">Enroll Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3D Studio -->
+<div id="studio" class="page">
+  <div class="dashboard-header">
+    <h1 class="animate-title">3D Studio</h1>
+    <p>Interactive 3D demonstrations</p>
+  </div>
+  <div class="studio-container">
+    <div class="studio-card animate-card">
+      <h3>Python Code Flow</h3>
+      <div class="studio-preview" id="python-demo"></div>
+      <button class="launch-btn">Launch 3D Demo</button>
+    </div>
+    <div class="studio-card animate-card">
+      <h3>Web Structure</h3>
+      <div class="studio-preview" id="web-demo"></div>
+      <button class="launch-btn">Launch 3D Demo</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div id="particles"></div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
+
+
+
+
+
+<style>
+.profile-card {
+    position: relative;
+    background-image: url('/static/images/intermediate-python.gif');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin: 45px;
+}
+
+.profile-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.62);  /* ⬅️ Increased from 0.5 to 0.7 for more dim */
+    z-index: 2;
+}
+
+
+
+
+
+.profile-card * {
+    position: relative;
+    z-index: 3;
+}
+.profile-card h1 {
+    font-size: 2.2rem;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.profile-card h2 {
+    font-size: 2.5rem;
+    color: #f0f0f0;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    margin-bottom: 1rem;
+}
+
+.profile-card p {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    line-height: 1.6;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+
+.badge-icon {
+    font-size: 35px;
+    color: #FFD700; /* golden glow */
+    margin: 0.5rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.badge-icon:hover {
+    transform: scale(1.3) rotate(5deg);
+    color: #fff; /* changes color on hover */
+    cursor: pointer;
+}
+
+
+
+/* learning path card  */
+
+.learning-path {
+    margin: 45px;
+    padding: 2rem;
+    position: relative;
+    background-image: url('static/images/banner (1).gif'); /* Update path if needed */
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.learning-path::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Dim the gif - adjust this for brightness */
+    z-index: -1;
+    border-radius: 15px; /* Match the container’s border-radius */
+}
+
+/* Optional: Text Styling */
+.learning-path h2,
+.learning-path p {
+    color: #fff;
+    font-size: 1.3rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* courses card   */
+
+.course-card {
+    width: 100%;
+    perspective: 1000px;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.6), 
+        rgba(0, 0, 0, 0.6)
+    ), url("static/images/python-animated.gif");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.card-front {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/python-animated.gif');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+</style>
+

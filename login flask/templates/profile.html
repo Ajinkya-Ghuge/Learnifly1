@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AeroEd - Your Profile</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+<body>
+    <!-- Navbar -->
+    <nav class="nav-bar">
+        <a href="/" class="nav-logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AeroEd Logo" class="logo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50.png?text=AeroEd';">
+        </a>
+        <div class="nav-links">
+            <button class="nav-button" onclick="window.location.href='/'">Dashboard</button>
+            <button class="nav-button" onclick="window.location.href='/'; showPage('progress')">Progress</button>
+            <button class="nav-button" onclick="window.location.href='/'; showPage('courses')">Courses</button>
+            <button class="nav-button" onclick="window.location.href='/'; showPage('studio')">3D Studio</button>
+            <button class="nav-button toggle-btn" onclick="toggleDarkMode()">🌓</button>
+            <a href="/logout" class="nav-button logout-btn">Logout</a>
+            <a href="/profile" class="nav-button profile-btn active">Profile</a>
+        </div>
+    </nav>
+
+    <!-- Profile Section -->
+    <div class="profile-page">
+        <div class="profile-header animate-card">
+            <h1 class="animate-title">Your Profile</h1>
+            <p>Manage your learning journey</p>
+        </div>
+        <div class="profile-info animate-card">
+            <div class="avatar-container">
+                <canvas id="avatar-canvas" width="300" height="400"></canvas>
+            </div>
+            <h2>{{ session.get('user_name', 'User') }}</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Email:</span>
+                    <span class="value">{{ session.get('user_email', 'Not Set') }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Total XP:</span>
+                    <span class="value" id="profile-total-xp">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Courses Enrolled:</span>
+                    <span class="value" id="profile-courses-enrolled">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="particles"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const totalXp = localStorage.getItem('total-xp') || '0';
+            const coursesEnrolled = localStorage.getItem('courses-enrolled') || '0';
+            document.getElementById('profile-total-xp').textContent = totalXp;
+            document.getElementById('profile-courses-enrolled').textContent = coursesEnrolled;
+
+            // Three.js Setup for Avatar
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 300 / 400, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('avatar-canvas'), alpha: true });
+            renderer.setSize(300, 400);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
+
+            // Load GLB Avatar
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                'https://models.readyplayer.me/67bb0cee07eaa99339b5cdb7.glb',
+                (gltf) => {
+                    const model = gltf.scene;
+                    scene.add(model);
+
+                    // Compute bounding box to center the full body
+                    const box = new THREE.Box3().setFromObject(model);
+                    const size = box.getSize(new THREE.Vector3());
+
+                    // Scale and position to fit full body
+                    const scale = 4;
+                    model.scale.set(scale, scale, scale);
+                    model.position.set(0, -size.y * scale * 0.7, 0); // Shifted up slightly more
+
+                    // Animation
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        model.rotation.y += 0.01;
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                },
+                undefined,
+                (error) => console.error('Error loading GLB:', error)
+            );
+
+            camera.position.z = 10; // Further back to fit full body
+        });
+    </script>
+</body>
+</html>

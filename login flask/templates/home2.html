@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learnifly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, rgb(13, 13, 26), rgb(26, 26, 59));
+      color: #fff;
+      overflow-x: hidden;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    .hero-section {
+      background-image: url('/static/images/sqlbanner.gif');
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 2rem;
+    }
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    .get-started-section {
+      position: relative;
+      padding: 4rem 2rem;
+      margin: 0 auto 0.5rem auto; /* Reduced bottom margin for smoother transition */
+      max-width: 1700px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .get-started-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('static/images/intermediate-python.gif') no-repeat center;
+      background-size: cover;
+      opacity: 0.3;
+      z-index: 1;
+      transition: opacity 0.7s ease; /* Smooth transition effect */
+    }
+    .get-started-section .content-wrapper {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(to bottom, rgba(26, 26, 59, 0.8), rgba(26, 26, 59, 0.6)); /* Gradient for smooth fade */
+      border-radius: 15px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .get-started-section h2 {
+      font-size: 2.8rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .get-started-section p {
+      font-size: 1.3rem;
+      color: #e0e0e0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin-bottom: 2.5rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .get-started-section .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .get-started-section .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .get-started-section .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0, 204, 255, 0.3);
+    }
+    .get-started-section .feature-icon {
+      font-size: 2.5rem;
+      color: #FFD700;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    }
+    .get-started-section .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin-bottom: 0.5rem;
+    }
+    .get-started-section .feature-desc {
+      font-size: 1rem;
+      color: #b0b0b0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .get-started-section .cta-button {
+      background: #00ccff;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .get-started-section .cta-button:hover {
+      background: #0099cc;
+    }
+    .course-section {
+      position: relative;
+      padding: -1rem 2rem;
+      margin: 0.5rem auto 2rem auto; /* Reduced top margin for smoother transition */
+      max-width: 1700px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .course-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('static/images/intermediate-python.gif') no-repeat center;
+      background-size: cover;
+      opacity: 0.3;
+      z-index: 1;
+      transition: opacity 0.7s ease; /* Smooth transition effect */
+    }
+    .course-section .content-wrapper {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(to bottom, rgba(26, 26, 59, 0.6), rgba(26, 26, 59, 0.8)); /* Gradient for smooth fade */
+      border-radius: 15px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .course-section h2 {
+      font-size: 2.8rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 2rem;
+      text-align: center; /* Ensure title is centered */
+    }
+    .course-card {
+      background-size: cover;
+      background-position: center;
+      min-height: 350px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .course-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+    .course-card:hover {
+      transform: scale(1.05);
+    }
+    .course-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+    .course-button {
+      background-color: #10b981;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    .course-button:hover {
+      background-color: #059669;
+    }
+    #course-1 { background-image: url('/static/images/town sq.png'); }
+    #course-2 { background-image: url('/static/images/python-animated.gif'); }
+    #course-3 { background-image: url('/static/images/javascript-course-banner.gif'); }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: rgba(0,0,0,0.7);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-button {
+      color: white;
+      margin-left: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .nav-button:hover {
+      text-decoration: underline;
+    }
+    .reviews-section, .contact-section {
+      position: relative;
+      padding: 4rem 2rem;
+      margin: 0rem auto;
+      max-width: 1700px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .reviews-section::before, .contact-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('/static/images/town sq.png') no-repeat center;
+      background-size: cover;
+      opacity: 0.3;
+      z-index: 1;
+    }
+    .reviews-section .content-wrapper, .contact-section .content-wrapper {
+      position: relative;
+      z-index: 2;
+      background: rgba(26, 26, 59, 0.8);
+      border-radius: 15px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .reviews-section h2, .contact-section h2 {
+      font-size: 2.8rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 2rem;
+    }
+    .reviews-section .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .reviews-section .review-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .reviews-section .review-card:hover {
+      transform: translateY(-10px);
+    }
+    .reviews-section .review-text {
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1rem;
+    }
+    .reviews-section .review-author {
+      font-size: 1rem;
+      color: #b0b0b0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      font-style: italic;
+    }
+    .contact-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .contact-section input, .contact-section textarea {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #00ccff33;
+      border-radius: 5px;
+      padding: 0.75rem;
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .contact-section input:focus, .contact-section textarea:focus {
+      border-color: #00ccff;
+      outline: none;
+    }
+    .contact-section button {
+      background: #00ccff;
+      color: #fff;
+      padding: 0.75rem;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .contact-section button:hover {
+      background: #0099cc;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: rgba(26, 26, 59, 0.9);
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .modal-content h3 {
+      font-size: 2rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+    }
+    .modal-content li {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-content li a {
+      background-color: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .modal-content li a:hover {
+      background-color: #059669;
+    }
+    .modal-content .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav-bar">
+    <div>
+      <a href="/" class="nav-button">Home</a>
+    </div>
+    <div>
+      {% if session.get('user_name') %}
+        <a href="/dashboard" class="nav-button">Dashboard</a>
+        <a href="/profile" class="nav-button">Profile</a>
+        <a href="/logout" class="nav-button">Logout</a>
+      {% else %}
+        <a href="/login" class="nav-button">Login</a>
+        <a href="/signup" class="nav-button">Sign Up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">Learn to Code, Soar to New Heights</h1>
+      <p class="text-xl md:text-2xl mb-6">Master programming with interactive courses, hands-on projects, and a supportive community.</p>
+      {% if session.get('user_id') %}
+        <a href="/dashboard" class="bg-green-500 text-white px-8 py-3 rounded-full text-lg hover:bg-green-600">Start Coding Now</a>
+      {% else %}
+        <a href="/login" class="bg-green-500 text-white px-8 py-3 rounded-full text-lg hover:bg-green-600">Start Coding Now</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Get Started Section -->
+  <section class="get-started-section">
+    <div class="content-wrapper">
+      <h2>Start Your Coding Journey Today</h2>
+      <p>Unlock a world of learning with personalized XP tracking, exciting badges, and a variety of courses tailored to your goals. Join a vibrant community and elevate your skills!</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Track Progress</div>
+          <div class="feature-desc">Earn XP and watch your skills grow with every lesson.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏅</div>
+          <div class="feature-title">Earn Badges</div>
+          <div class="feature-desc">Celebrate achievements with unique digital rewards.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <div class="feature-title">Explore Courses</div>
+          <div class="feature-desc">Dive into interactive lessons designed for all levels.</div>
+        </div>
+      </div>
+      {% if not session.get('user_id') %}
+        <a href="/signup" class="cta-button">Join Now</a>
+      {% else %}
+        <a href="/dashboard" class="cta-button">Continue Learning</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section class="course-section">
+    <div class="content-wrapper">
+      <h2>Our Courses</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div id="course-1" class="course-card">
+          <div class="course-content">
+            <h3 class="text-2xl font-semibold mb-4">Interactive Learning</h3>
+            <p>Engaging lessons, real-time feedback and beginner friendly courses!</p>
+            <a class="course-button" onclick="showTopics('Interactive Learning', ['Introduction to Coding', 'Variables and Data Types', 'Control Structures', 'Functions', 'Basic Projects'])">Explore Course</a>
+          </div>
+        </div>
+        <div id="course-2" class="course-card">
+          <div class="course-content">
+            <h3 class="text-2xl font-semibold mb-4">Python Mastery</h3>
+            <p>Learn data analysis, automation, and web development through projects.</p>
+            <a class="course-button" onclick="showTopics('Python Mastery', ['Python Basics', 'Data Structures', 'File Handling', 'Libraries and Modules', 'Web Scraping'])">Explore Course</a>
+          </div>
+        </div>
+        <div id="course-3" class="course-card">
+          <div class="course-content">
+            <h3 class="text-2xl font-semibold mb-4">JavaScript Essentials</h3>
+            <p>Build interactive web apps, master DOM, APIs, and JS frameworks.</p>
+            <a class="course-button" onclick="showTopics('JavaScript Essentials', ['JavaScript Basics', 'DOM Manipulation', 'Events and Listeners', 'APIs and Fetch', 'Frameworks Intro'])">Explore Course</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Topics Modal -->
+  <div id="topicsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <h3 id="modalCourseTitle"></h3>
+      <ul id="topicsList"></ul>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section">
+    <div class="content-wrapper">
+      <h2>What Our Learners Say</h2>
+      <div class="review-grid">
+        <div class="review-card">
+          <div class="review-text">"Learnifly transformed my coding skills! The interactive lessons are amazing."</div>
+          <div class="review-author">- Priya S.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-text">"The XP system keeps me motivated. Highly recommend this platform!"</div>
+          <div class="review-author">- Rohan K.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-text">"Great community and top-notch courses. A must-try for beginners!"</div>
+          <div class="review-author">- Apoorva M.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Us Section -->
+  <section class="contact-section">
+    <div class="content-wrapper">
+      <h2>Contact Us</h2>
+      <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8">
+    <div class="container mx-auto px-6 text-center">
+      <p>© 2025 Learnifly. All rights reserved.</p>
+      <div class="mt-4 space-x-4">
+        <a href="#privacy" class="hover:text-gray-300">Privacy Policy</a>
+        <a href="#terms" class="hover:text-gray-300">Terms of Service</a>
+        <a href="#contact" class="hover:text-gray-300">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function showTopics(courseTitle, topics) {
+      console.log(`Showing topics for ${courseTitle}:`, topics);
+      const modal = document.getElementById('topicsModal');
+      const modalTitle = document.getElementById('modalCourseTitle');
+      const topicsList = document.getElementById('topicsList');
+      
+      modalTitle.textContent = `Topics for ${courseTitle}`;
+      topicsList.innerHTML = '';
+      
+      topics.forEach(topic => {
+        const li = document.createElement('li');
+        const link = `./topic.html?course=${encodeURIComponent(courseTitle)}&topic=${encodeURIComponent(topic)}`;
+        li.innerHTML = `${topic} <a href="${link}" onclick="console.log('Navigating to:', '${link}')">Start</a>`;
+        topicsList.appendChild(li);
+      });
+      
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('topicsModal');
+      modal.style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('topicsModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
