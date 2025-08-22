@@ -1,21 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup | learnifly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0d0d1a, #1a1a3e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .signup-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      padding: 3rem 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+    }
+
+    .signup-container h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #00ccff;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    .signup-btn {
+      padding: 0.75rem 1rem;
+      background-color: #00ccff;
+      color: #0d0d1a;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .signup-btn:hover {
+      background-color: #00aacc;
+    }
+
+    .error-msg {
+      color: #ff4d4d;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .login-link a {
+      color: #00ccff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .signup-container {
+        padding: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Signup</h1>
-    <form action="/signup" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Signup</button>
+  <div class="signup-container">
+    <h2>Join Learnifly</h2>
+
+    {% if error %}
+      <p class="error-msg">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="/signup">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Enter your email" required />
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" placeholder="Enter your password" required />
+
+      <button type="submit" class="signup-btn">Signup</button>
     </form>
-    <p>Already have an account? <a href="/login">Login here</a></p>
+
+    <div class="login-link">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
+  </div>
 </body>
 </html>
