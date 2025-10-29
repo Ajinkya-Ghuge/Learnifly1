@@ -101,6 +101,42 @@
         text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
     }
 
+    .path-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .path-line {
+        flex: 1;
+        height: 2px;
+        background: #fff;
+        margin: 0 1rem;
+    }
+
+    .milestone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .milestone-icon {
+        font-size: 2rem;
+    }
+
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 45px;
+    }
+
+    .course-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .course-card {
         width: 100%;
         perspective: 1000px;
@@ -330,6 +366,10 @@
         z-index: 1;
         overflow: hidden;
         text-align: center;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 45px;
     }
 
     .studio-container::before {
@@ -385,6 +425,9 @@
         padding: 1rem 2rem;
         background: #1a1a3e;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
     }
 
     .nav-logo img {
@@ -426,6 +469,255 @@
     .logout-btn:hover {
         background: #e60000;
     }
+
+    .enroll-btn {
+        background: #10b981;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s ease;
+    }
+
+    .enroll-btn:hover {
+        background: #059669;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: rgba(26, 26, 59, 0.9);
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .modal-content h3 {
+      font-size: 2rem;
+      color: #00ccff;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+    }
+    .modal-content li {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-content li a {
+      background-color: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .modal-content li a:hover {
+      background-color: #059669;
+    }
+    .modal-content .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .hamburger {
+        display: none;
+        background: #2a2a72;
+        border: none;
+        color: white;
+        font-size: 2rem; /* Increased size for visibility */
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Added shadow for contrast */
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .hamburger:hover {
+        background: #3a3a92;
+        transform: scale(1.1);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .nav-bar {
+        padding: 0.5rem 1rem;
+      }
+
+      .nav-logo img {
+        height: 30px;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: rgba(26, 26, 62, 0.95);
+        backdrop-filter: blur(5px);
+        padding: 2rem;
+        border-radius: 0 0 0 15px;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+        gap: 1.5rem;
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .nav-links.active {
+        display: flex;
+        transform: translateX(0);
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-button {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+        width: 100%;
+        text-align: center;
+        border-radius: 10px;
+      }
+
+      .profile-card, .progress-card, .learning-path, .leaderboard, .studio-container {
+        margin: 20px;
+        padding: 1rem;
+      }
+
+      .path-container {
+        flex-direction: column;
+      }
+
+      .path-line {
+        width: 2px;
+        height: 50px;
+        margin: 1rem 0;
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+        margin: 20px;
+      }
+
+      .dashboard-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .studio-container {
+        grid-template-columns: 1fr;
+        margin: 20px;
+      }
+
+      .modal-content {
+        padding: 1rem;
+        width: 95%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-card h2 {
+        font-size: 1.8rem;
+      }
+
+      .progress-card h2, .learning-path h2, .leaderboard h3 {
+        font-size: 1.5rem;
+      }
+
+      .studio-card h3 {
+        font-size: 1.2rem;
+      }
+
+      .nav-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .nav-logo img {
+        height: 25px;
+      }
+
+      .xp-points {
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .badge-icon {
+        font-size: 25px;
+      }
+
+      .milestone-icon {
+        font-size: 1.5rem;
+      }
+
+      .course-card {
+        padding: 1rem;
+      }
+
+      .enroll-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      .launch-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      .modal-content h3 {
+        font-size: 1.5rem;
+      }
+
+      .modal-content li {
+        padding: 0.8rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+
+      .modal-content li a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -435,6 +727,7 @@
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Learnifly Logo" class="logo-img"
          onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50.png?text=L';">
   </a>
+  <button class="hamburger" id="menu-toggle">☰</button>
   <div class="nav-links">
     <a href="/" class="nav-button">Home</a>
     <button class="nav-button" onclick="showPage('dashboard')">Dashboard</button>
@@ -550,7 +843,7 @@
           </div>
         </div>
       </div>
-      <button class="enroll-btn" id="enroll-python">Enroll Now</button>
+      <button class="enroll-btn" onclick="showTopics('Python Basics', ['Introduction to Python', 'Variables and Data Types', 'Control Structures', 'Functions', 'Basic Projects'])">Enroll Now</button>
     </div>
 
     <div class="course-container">
@@ -568,7 +861,7 @@
           </div>
         </div>
       </div>
-      <button class="enroll-btn" id="enroll-web">Enroll Now</button>
+      <button class="enroll-btn" onclick="showTopics('Web Development', ['HTML Basics', 'CSS Styling', 'JavaScript Basics', 'DOM Manipulation', 'Projects'])">Enroll Now</button>
     </div>
   </div>
 </div>
@@ -577,7 +870,7 @@
 <div id="studio" class="page">
   <div class="dashboard-header">
     <h1 class="animate-title">3D Studio</h1>
-    <p>Interactive 3D demonstrations</p>
+    <p>Interactive 3D demonstrations(Coming Soon )</p>
   </div>
   <div class="studio-container">
     <div class="studio-card animate-card">
@@ -593,7 +886,62 @@
   </div>
 </div>
 
+<!-- Topics Modal -->
+<div id="topicsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <h3 id="modalCourseTitle"></h3>
+    <ul id="topicsList"></ul>
+  </div>
+</div>
+
 <div id="particles"></div>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+  function showTopics(courseTitle, topics) {
+    const modal = document.getElementById('topicsModal');
+    const modalTitle = document.getElementById('modalCourseTitle');
+    const topicsList = document.getElementById('topicsList');
+    
+    modalTitle.textContent = `Topics for ${courseTitle}`;
+    topicsList.innerHTML = '';
+    
+    topics.forEach(topic => {
+      const li = document.createElement('li');
+      const link = `./topic.html?course=${encodeURIComponent(courseTitle)}&topic=${encodeURIComponent(topic)}`;
+      li.innerHTML = `${topic} <a href="${link}">Start</a>`;
+      topicsList.appendChild(li);
+    });
+    
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('topicsModal');
+    modal.style.display = 'none';
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('topicsModal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  }
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!navLinks.contains(event.target) && event.target !== menuToggle) {
+      navLinks.classList.remove('active');
+    }
+  });
+</script>
 </body>
 </html>
