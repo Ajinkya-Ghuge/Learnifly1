@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://learnifly_db_user:mKMvmc2DHa7Q1wsjzYrlDXMDVd6YK3Lo@dpg-d413n87gi27c73d52qq0-a/learnifly_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'
 
@@ -96,3 +96,4 @@ def topic():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5006)
+
