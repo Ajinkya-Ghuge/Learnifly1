@@ -1,16 +1,9 @@
-import os
 from flask import Flask, request, jsonify, session, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
-# Direct PostgreSQL connection string for Render
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL',
-    'postgresql://learnify_9ca2_user:aTcIJtGPzgLa1HvCVh1ZMN0DMybfSkd4@dpg-d2ea3d3ipnbc739o171g-a.singapore-postgres.render.com/learnify_9ca2'
-).replace("postgres://", "postgresql://")
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'
 
@@ -23,7 +16,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
-# 🛠 Create DB tables
+# 🛠 Create DB
 with app.app_context():
     db.create_all()
 
